@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodbEV
+    restart: always
+    ports:
+      - "27016:27016"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rootuser
+      MONGO_INITDB_ROOT_PASSWORD: rootpass
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
