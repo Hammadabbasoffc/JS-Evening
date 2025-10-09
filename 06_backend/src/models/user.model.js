@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt"
+
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -20,21 +22,7 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
-    isVerified: {
-        type: Boolean,
-        default: false
-    },
-    verificationToken: {
-        type: String,
-        default: null
-    },
-    passwordResetToken: {
-        type: String,
-        default: null
-    },
-    passwordResetExpires: {
-        type: Date
-    }
+
 },
     {
         timestamps: true

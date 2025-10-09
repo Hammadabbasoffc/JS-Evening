@@ -4,7 +4,11 @@ import dotenv from "dotenv"
 dotenv.config()
 
 const storeCookies = (res, payload) => {
+    console.log("i am in cookies");
+
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" })
+    console.log("token", token);
+
     res.cookie("token", token, {
         httpOnly: true,
         secure: true,

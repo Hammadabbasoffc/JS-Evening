@@ -1,10 +1,8 @@
-import User from "../models/User.model.js"
 import bcrypt from "bcrypt"
-import storeCookies from "../utils/jwt.js"
-import crypto from "crypto"
-import nodemailer from "nodemailer"
+import User from "../models/user.model.js"
+import storeCookies from "../utils/storeCookies.js"
 const registerUser = async (req, res) => {
-    console.log(req.body);
+    console.log(req);
 
     const { name, email, password, role } = req.body
 
@@ -33,36 +31,6 @@ const registerUser = async (req, res) => {
                 message: "user do not created"
             })
         }
-
-
-        const token = crypto.randomBytes(32).toString("hex")
-        user.verificationToken = token
-        await user.save()
-
-        const transporter = nodemailer.createTransport({
-            host: process.env.MAILTRAP_HOST,
-            port: process.env.MAILTRAP_PORT,
-            auth: {
-                user: process.env.MAILTRAP_USERNAME,
-                pass: process.env.MAILTRAP_PASSWORD
-            }
-        })
-
-
-        const mailOptions = {
-            from: process.env.MAILTRAP_SENDER_EMAIL,
-            to: user.email,
-            subject: "Verify your email",
-            text: `Please click on the following link to verify your email: ${process.env.BASE_URL}/api/v1/users/verify/${token}`,
-        };
-
-        await transporter.sendMail(mailOptions)
-
-
-
-
-
-
         return res.status(201).json({
             success: true,
             message: "user Createde Successfully",
@@ -94,6 +62,8 @@ const login = async (req, res) => {
             email
         })
 
+
+
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -101,12 +71,7 @@ const login = async (req, res) => {
             })
         }
 
-        if (user.isVerified === false) {
-            return res.status(400).json({
-                success: false,
-                message: "Please verify your email to login"
-            })
-        }
+
 
         const isMatched = bcrypt.compare(password, user.password)
 
@@ -116,6 +81,8 @@ const login = async (req, res) => {
                 message: "User not LoggedIn"
             })
         }
+
+        console.log("I am here  ........");
 
 
         const payload = {
@@ -139,3 +106,5 @@ const login = async (req, res) => {
 
 
 }
+
+export { login, registerUser }
