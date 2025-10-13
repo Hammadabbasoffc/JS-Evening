@@ -31,6 +31,9 @@ const registerUser = async (req, res) => {
                 message: "user do not created"
             })
         }
+
+
+
         return res.status(201).json({
             success: true,
             message: "user Createde Successfully",
@@ -105,6 +108,29 @@ const login = async (req, res) => {
 
 
 
+
+
 }
 
-export { login, registerUser }
+const logout = async (req, res) => {
+    try {
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 24 * 60 * 60 * 1000
+        })
+
+        res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error during logout",
+        });
+    }
+}
+
+export { login, registerUser, logout }
